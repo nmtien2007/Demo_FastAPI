@@ -1,0 +1,12 @@
+pydantic
+fastapi
+uvicorn
+sqlalchemy
+mysql-connector-python
+jsonschema
+bcrypt
+pyjwt
+aiofiles
+jinja2
+pymemcache
+python3-memcached
