@@ -33,6 +33,7 @@ def authorization(request: Request, header=Depends(PreLoginHeader)):
     from fastapi.templating import Jinja2Templates
 
     templates = Jinja2Templates(directory="templates")
+    
     return templates.TemplateResponse(
         "new_login.html",
         {

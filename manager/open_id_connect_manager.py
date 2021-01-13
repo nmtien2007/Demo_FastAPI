@@ -4,6 +4,7 @@ import jwt
 import config
 from manager import token_manager, session_manager
 from utils import get_timestamp, generate_authorization_code, convert_datetime_to_timestamp
+from common.logger import log
 
 
 class AuthorizationModel(object):
@@ -96,7 +97,7 @@ class AuthorizationCodeModel(AuthorizationModel):
             cache_obj.set(self.cache_key, authorization_code, self.expiry_time)
 
         except Exception as err:
-            print(err)
+            log.warn("cache_auth_code_fail|error = %s", err)
 
         return self.redirect_url
 
@@ -120,7 +121,7 @@ class AuthorizationCodeModel(AuthorizationModel):
             try:
                 self.access_token = jwt.encode(data, self.client_secret, algorithm=self.algorithm)
             except Exception as err:
-                print(err)
+                log.warn("generate_access_token_fail|error=%s", err)
 
             # Update the access token of user
             self.update_user_token(expiry_time)

@@ -9,9 +9,8 @@ from database import engine
 from starlette.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import HTMLResponse
-
-
 import uvicorn
+
 
 models.Base.metadata.create_all(bind=engine)
 

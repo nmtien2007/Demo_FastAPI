@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 import models
 import time
 import random
+from common.logger import log
 
 UNICODE_ASCII_CHARACTER_SET = ('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
 
@@ -59,7 +60,8 @@ def register_application(db: Session, app_name, redirect_url=None, algorithm="HS
         db.refresh(app)
 
         return 1
-    except:
+    except Exception as err:
+        log.warn("register_application_fail| error = %s", err)
         return 0
 
 def get_list_enable_sso_client_ids(db: Session):
