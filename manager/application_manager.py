@@ -26,12 +26,14 @@ def generate_client_secret(length=40, chars=UNICODE_ASCII_CHARACTER_SET):
 
 
 def get_application_info_by_app_name(app_name, db: Session):
-    model = db.query(models.ApplicationTab).filter(models.ApplicationTab.app_name == app_name).first()
+    model = db.using_bind("slave").query(models.ApplicationTab).filter(models.ApplicationTab.app_name == app_name).first()
     return model
 
 
 def get_application_info_by_client_id(client_id, db: Session):
-    model = db.query(models.ApplicationTab).filter(models.ApplicationTab.client_id == client_id).first()
+    # model = db.query(models.ApplicationTab).filter(models.ApplicationTab.client_id == client_id).first()
+    # return model
+    model = db.using_bind("slave").query(models.ApplicationTab).filter(models.ApplicationTab.client_id == client_id).first()
     return model
 
 
@@ -55,9 +57,10 @@ def register_application(db: Session, app_name, redirect_url=None, algorithm="HS
             created_time=created_time,
             updated_time=updated_time
         )
+        db = db.using_bind()
         db.add(app)
         db.commit()
-        db.refresh(app)
+        # db_.refresh(app)
 
         return 1
     except Exception as err:
@@ -65,7 +68,7 @@ def register_application(db: Session, app_name, redirect_url=None, algorithm="HS
         return 0
 
 def get_list_enable_sso_client_ids(db: Session):
-    client_ids = list(map(lambda x: x[0], db.query(models.ApplicationTab.client_id).filter(
+    client_ids = list(map(lambda x: x[0], db.using_bind("slave").query(models.ApplicationTab.client_id).filter(
         models.ApplicationTab.is_deleted == False,
         models.ApplicationTab.enable_sso == True
     ).all()))

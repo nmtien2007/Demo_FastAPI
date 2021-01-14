@@ -5,14 +5,16 @@ from views import login_api, application_api, user_api
 from views import test_api
 import schemas
 import models
-from database import engine
+from database import engines
 from starlette.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import HTMLResponse
 import uvicorn
 
 
-models.Base.metadata.create_all(bind=engine)
+# models.Base.metadata.create_all(bind=engine)
+for engine in ["master", "slave"]:
+    models.DefaultBase.metadata.create_all(engines[engine])
 
 origins = [
     "http://localhost:8001",

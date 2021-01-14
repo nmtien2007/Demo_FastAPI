@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, SmallInteger, String, BigInteger, TypeDecorator
+from sqlalchemy import Column, Integer, SmallInteger, String, BigInteger, TypeDecorator, MetaData
 from database import Base
 
 
@@ -17,8 +17,16 @@ class CustomerBoolean(TypeDecorator):
             value = True if value == 1 else False
         return value
 
+class DefaultBase(Base):
+    __abstract__ = True
+    metadata = MetaData()
 
-class ApplicationTab(Base):
+
+class OtherBase(Base):
+    __abstract__ = True
+    metadata = MetaData()
+
+class ApplicationTab(DefaultBase):
     __tablename__ = "application_tab"
 
     id = Column(BigInteger, primary_key=True, index=True)
@@ -33,7 +41,7 @@ class ApplicationTab(Base):
     created_time = Column(Integer)
     updated_time = Column(Integer)
 
-class AccessTokenTab(Base):
+class AccessTokenTab(DefaultBase):
     __tablename__ = "access_token_tab"
 
     id = Column(BigInteger, primary_key=True, index=True)
@@ -44,7 +52,7 @@ class AccessTokenTab(Base):
     created_time = Column(Integer, nullable=False)
     updated_time = Column(Integer, nullable=False)
 
-class UserInfoTab(Base):
+class UserInfoTab(DefaultBase):
     __tablename__ = "user_info_tab"
 
     id = Column(BigInteger, primary_key=True, index=True)
@@ -59,7 +67,7 @@ class UserInfoTab(Base):
     created_time = Column(Integer)
     updated_time = Column(Integer)
 
-class SsoSessionTab(Base):
+class SsoSessionTab(DefaultBase):
     __tablename__ = "sso_session_tab"
 
     id = Column(BigInteger, primary_key=True, index=True)
