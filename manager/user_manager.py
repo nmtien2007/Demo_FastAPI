@@ -79,7 +79,7 @@ def filter_user_infos(db: Session, user_name=None, phone=None, email=None):
     #     for item in ls_models:
     #         user_ids.append(item.id)
 
-    user_ids = list(map(lambda x: x[0], ls_models.all()))
+    user_ids = list(map(lambda x: x.id, ls_models.all()))
 
     return user_ids
 
