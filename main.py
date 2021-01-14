@@ -75,6 +75,14 @@ app.add_api_route(
 )
 
 app.add_api_route(
+    path="/update_application",
+    endpoint=application_api.update_application,
+    methods=["POST"],
+    summary="Update Application",
+    response_model=schemas.ResponseSchema
+)
+
+app.add_api_route(
     path="/login",
     endpoint=login_api.login,
     methods=["POST"],

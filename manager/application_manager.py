@@ -29,13 +29,13 @@ def get_application_info_by_app_name(app_name, db: Session):
     model = db.using_bind("slave").query(models.ApplicationTab).filter(models.ApplicationTab.app_name == app_name).first()
     return model
 
-
 def get_application_info_by_client_id(client_id, db: Session):
-    # model = db.query(models.ApplicationTab).filter(models.ApplicationTab.client_id == client_id).first()
-    # return model
     model = db.using_bind("slave").query(models.ApplicationTab).filter(models.ApplicationTab.client_id == client_id).first()
     return model
 
+def get_application_info_by_app_id(app_id, db: Session):
+    model = db.using_bind("slave").query(models.ApplicationTab).filter(models.ApplicationTab.id == app_id).first()
+    return model
 
 def register_application(db: Session, app_name, redirect_url=None, algorithm="HS256", enable_sso=False):
     redirect_url = redirect_url if redirect_url is not None else ""
@@ -74,3 +74,33 @@ def get_list_enable_sso_client_ids(db: Session):
     ).all()))
 
     return client_ids
+
+def update_application(db: Session, app_id, app_name=None, redirect_url=None, enable_sso=None, algorithm=None):
+    updated_time = round(int(time.time()))
+    model = db.using_bind("slave").query(models.ApplicationTab).filter(models.ApplicationTab.id == app_id).first()
+
+    if not model:
+        return 0
+
+    try:
+        if app_name is not None:
+            model.app_name = app_name
+
+        if redirect_url is not None:
+            model.redirect_url = redirect_url
+
+        if enable_sso is not None:
+            model.enable_sso = enable_sso
+
+        if algorithm is not None:
+            model.algorithm = algorithm
+
+        model.updated_time = updated_time
+
+        db = db.using_bind("master")
+        db.commit()
+        db.flush()
+        return 1
+    except Exception as err:
+        log.warn("update_application_fail|error=%s", err)
+        return 0

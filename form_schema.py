@@ -45,3 +45,9 @@ class VerifyAuthorizationCode(BaseModel):
 class LoginSsoSchema(BaseModel):
     session_id: str
 
+class UpdateAppSchema(BaseModel):
+    id: int
+    app_name: Optional[str] = None
+    redirect_url: Optional[str] = None
+    algorithm: Optional[str] = None
+    enable_sso: Optional[bool] = None
