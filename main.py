@@ -163,3 +163,6 @@ async def validation_exception_handler(request, exc):
 
 if __name__ == "__main__":
     uvicorn.run(app, host="localhost", port=8001)
+
+    # using reload
+    # uvicorn.run("main:app", host="localhost", port=8001, reload=True)
