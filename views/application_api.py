@@ -3,10 +3,10 @@ from api_response_data import api_response_data
 from manager import application_manager
 from form_schema import RegisterAppSchema, UpdateAppSchema
 from utils import parse_params, pre_process_header
-from headers import PreLoginHeader
+from headers import LoginHeader
 
 
-@parse_params(PreLoginHeader, RegisterAppSchema)
+@parse_params(LoginHeader, RegisterAppSchema)
 @pre_process_header()
 def register_application(request, data, db: Session):
     app_name = data["app_name"]
@@ -24,7 +24,7 @@ def register_application(request, data, db: Session):
 
     return api_response_data("success", {"affected_count": affected_count})
 
-@parse_params(PreLoginHeader, UpdateAppSchema)
+@parse_params(LoginHeader, UpdateAppSchema)
 @pre_process_header()
 def update_application(request, data, db: Session):
     app_id = data["id"]
