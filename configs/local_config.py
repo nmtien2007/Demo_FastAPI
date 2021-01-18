@@ -19,3 +19,8 @@ ISS = "http://localhost:8001"
 LOGGER_CONFIG = {
 	'log_dir': os.path.join(BASE_DIR, 'log'),
 }
+
+ALLOW_ORIGINS = ["*"]
+ALLOW_CREDENTIALS = False
+ALLOW_METHODS = ["*"]
+ALLOW_HEADERS = ["Authorization-Code", "Access-Token", "Client-Id"]

@@ -3,6 +3,7 @@ from fastapi import FastAPI, status
 from fastapi.staticfiles import StaticFiles
 from views import login_api, application_api, user_api
 from views import test_api
+import config
 import schemas
 import models
 from database import engines
@@ -32,10 +33,10 @@ app.mount("/Demo_FastApi/static" , StaticFiles(directory="static"), name="static
 app.add_middleware(
     CORSMiddleware,
     # allow_origins=["http://localhost:8001", "localhost:8001", "127.0.0.1:8001", "file:///home/nmtien/Desktop"],
-    allow_origins=["*"],
-    allow_credentials=False,
-    allow_methods=["*"],
-    allow_headers=["Authorization-Code", "Access-Token", "Client-Id"],
+    allow_origins=config.ALLOW_ORIGINS,
+    allow_credentials=config.ALLOW_CREDENTIALS,
+    allow_methods=config.ALLOW_METHODS,
+    allow_headers=config.ALLOW_HEADERS,
 )
 
 # app.add_api_route(
