@@ -1,4 +1,4 @@
-from fastapi import Request, Depends, Header
+from fastapi import Request, Depends
 from sqlalchemy.orm import Session
 from database import get_db
 from api_response_data import api_response_data
@@ -7,6 +7,7 @@ from manager import application_manager, login_manager
 from random import SystemRandom
 import time
 import jwt
+import base64
 
 
 UNICODE_ASCII_CHARACTER_SET = ('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
@@ -77,6 +78,13 @@ def pre_process_header():
             data_body["client_secret"] = app_info.client_secret
             data_body["algorithm"] = app_info.algorithm
 
+            # check Authorization
+            if "Basic" not in data_body["authorization_code"]:
+                return api_response_data("error_formatted_authorization_incorrect")
+
+            if not check_valid_authorization(data_body["authorization_code"], data_body["client_id"], data_body["client_secret"]):
+                return api_response_data("error_authorization_incorrect")
+
             return func(request, data_body, db, *args, **kwargs)
         return _func
     return _pre_process_header
@@ -126,3 +134,7 @@ def decrypt_access_token(access_token, client_id, secret_key, algorithms=None):
         return decrypted_access_token
     except Exception as err:
         return {}
+
+def check_valid_authorization(authorization, client_id, client_secret):
+    created_authorization = base64.b64encode((client_id + ":" + client_secret).encode("ascii"))
+    return authorization[str(authorization).index(" ") + 1:] == created_authorization.decode("ascii")

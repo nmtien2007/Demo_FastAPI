@@ -1,9 +1,10 @@
+from database import get_db
 from fastapi import Depends, Request
 from sqlalchemy.orm import Session
 from api_response_data import api_response_data
 from manager import user_manager, login_manager, token_manager, session_manager, application_manager
 from form_schema import LoginSchema, VerifyAuthorizationCode, LoginSsoSchema
-from utils import parse_params, pre_process_header, get_header, get_timestamp
+from utils import parse_params, pre_process_header, get_header, get_timestamp, check_valid_authorization
 from headers import PreLoginHeader, LoginHeader
 
 
@@ -29,10 +30,31 @@ def login(request, data, db: Session):
 
     return api_response_data("error_password_not_correct", None)
 
-def authorization(request: Request, header=Depends(PreLoginHeader)):
+def authorization(request: Request, header=Depends(PreLoginHeader), db=Depends(get_db)):
     from fastapi.templating import Jinja2Templates
 
     templates = Jinja2Templates(directory="templates")
+    error_msg = ""
+
+    app_info = application_manager.get_application_info_by_client_id(header.Client_Id, db)
+    if not app_info:
+        error_msg = "error_application_not_existed"
+
+    # check authorization
+    if not error_msg and "Basic" not in header.Authorization_Code:
+        error_msg = "error_formatted_authorization_incorrect"
+
+    if not error_msg and not check_valid_authorization(header.Authorization_Code, header.Client_Id, app_info.client_secret):
+        error_msg = "error_authorization_incorrect"
+
+    if error_msg:
+        return templates.TemplateResponse(
+            "error.html",
+            {
+                "request": request,
+                "error_msg": error_msg,
+            }
+        )
 
     return templates.TemplateResponse(
         "new_login.html",
