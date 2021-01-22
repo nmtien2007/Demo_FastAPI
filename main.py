@@ -56,6 +56,7 @@ app.add_api_route(
     endpoint=login_api.authorization,
     methods=["GET"],
     summary="Authorization Func",
+    tags=["Authorization"],
     response_class=HTMLResponse
 )
 
@@ -64,6 +65,7 @@ app.add_api_route(
     endpoint=login_api.verify_authorization_code,
     methods=["POST"],
     summary="Verify Authorization Code Func",
+    tags=["Authorization"],
     response_model=schemas.ResponseSchema
 )
 
@@ -72,6 +74,7 @@ app.add_api_route(
     endpoint=application_api.register_application,
     methods=["POST"],
     summary="Register Application Func",
+    tags=["Application"],
     response_model=schemas.ResponseSchema
 )
 
@@ -80,6 +83,7 @@ app.add_api_route(
     endpoint=application_api.update_application,
     methods=["POST"],
     summary="Update Application",
+    tags=["Application"],
     response_model=schemas.ResponseSchema
 )
 
@@ -88,6 +92,7 @@ app.add_api_route(
     endpoint=login_api.login,
     methods=["POST"],
     summary="Login Func",
+    tags=["Login"],
     response_model=schemas.ResponseSchema
 )
 
@@ -96,6 +101,7 @@ app.add_api_route(
     endpoint=login_api.login_sso,
     methods=["POST"],
     summary="Login SSO",
+    tags=["Login"],
     response_model=schemas.ResponseSchema
 )
 
@@ -104,6 +110,7 @@ app.add_api_route(
     endpoint=login_api.logout,
     methods=["POST"],
     summary="Logout Func",
+    tags=["Login"],
     response_model=schemas.ResponseSchema
 )
 
@@ -112,6 +119,7 @@ app.add_api_route(
     endpoint=user_api.create_user,
     methods=["POST"],
     summary="Create User Func",
+    tags=["User"],
     response_model=schemas.ResponseSchema
 )
 
@@ -120,6 +128,7 @@ app.add_api_route(
     endpoint=user_api.get_user_ids,
     methods=["POST"],
     summary="Get User Ids Func",
+    tags=["User"],
     response_model=schemas.ResponseSchema
 )
 
@@ -128,6 +137,7 @@ app.add_api_route(
     endpoint=user_api.get_user_infos,
     methods=["POST"],
     summary="Get User Infos Func",
+    tags=["User"],
     response_model=schemas.ResponseSchema
 )
 
