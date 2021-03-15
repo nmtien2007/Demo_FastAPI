@@ -23,7 +23,9 @@ origins = [
 
 app = FastAPI(
     debug=True,
-    title="Demo FastApi"
+    title="Demo FastApi",
+    docs_url=config.DOCS_URL,
+    redoc_url=config.REDOC_URL
 )
 
 # Mount Static folder

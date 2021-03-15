@@ -24,3 +24,6 @@ ALLOW_ORIGINS = ["*"]
 ALLOW_CREDENTIALS = False
 ALLOW_METHODS = ["*"]
 ALLOW_HEADERS = ["Authorization-Code", "Access-Token", "Client-Id"]
+
+DOCS_URL = "/docs"
+REDOC_URL = "/redoc"
